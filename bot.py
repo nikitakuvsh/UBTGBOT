@@ -7,6 +7,7 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filters
 from openai import OpenAI
 
+from narrative_prompt import NARRATIVE_PROMPT
 
 load_dotenv()
 
@@ -21,7 +22,6 @@ client = OpenAI(
 )
 
 user_histories = defaultdict(list)
-
 
 def ask_gpt(messages):
     try:
@@ -42,7 +42,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if not user_histories[user_id]:
         user_histories[user_id].append(
-            {"role": "system", "content": "Ты полезный ассистент."}
+            {"role": "system", "content": NARRATIVE_PROMPT}
         )
 
     user_histories[user_id].append({"role": "user", "content": text})
